@@ -1,12 +1,6 @@
 import { Router, Request, Response } from "express";
-
+import { getController } from "../controllers/homeController";
 const router = Router();
-
-router.get(
-  "/",
-  (req: Request, res: Response): Response<JSON> => {
-    return res.json("Hola mundo desde typescript y express!");
-  }
-);
+router.get("/", getController);
 
 export default router;
