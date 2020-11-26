@@ -1,12 +1,12 @@
 import { Response, Request, RequestHandler } from "express";
 import Product, { IProducts } from "../models/Products";
-
+type productType = IProducts | null;
 export const getControllerProduct: RequestHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const products: IProducts[] = await Product.find();
+    const products: productType[] = await Product.find();
     if (products.length <= 0) {
       res.status(200).json("Products stock is empty");
       return;
@@ -22,7 +22,7 @@ export const getIdControllerProduct: RequestHandler = async (
 ) => {
   const { id } = req.params;
   try {
-    const response: IProducts | null = await Product.findById(id);
+    const response: productType = await Product.findById(id);
     if (!response) {
       res.status(400).json("This product dont exist.");
       return;
@@ -38,7 +38,7 @@ export const postControllerProduct: RequestHandler = async (
 ): Promise<void> => {
   const { name, description, price } = req.body;
   try {
-    const product: IProducts = new Product({
+    const product: productType = new Product({
       name,
       description,
       price,
@@ -59,12 +59,40 @@ export const deleteControllerProduct: RequestHandler = async (
 ) => {
   const { id } = req.params;
   try {
-    const response: IProducts | null = await Product.findByIdAndDelete(id);
+    const response: productType = await Product.findByIdAndDelete(id);
     if (!response) {
       res.status(400).json("This product dont exist.");
       return;
     }
     res.status(200).json("Deleted product successfully");
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+export const putControllerProduct: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const { id } = req.params;
+  const updateProduct = {
+    ...req.body,
+  };
+  try {
+    const productUpdate: productType = await Product.findByIdAndUpdate(
+      id,
+      updateProduct,
+      {
+        new: true,
+      }
+    );
+    if (!productUpdate) {
+      res.status(400).json("Product dont exist");
+      return;
+    }
+    res
+      .status(201)
+      .json({ msg: "Product updated successfully", productUpdate });
   } catch (error) {
     res.status(500).json(error);
   }
