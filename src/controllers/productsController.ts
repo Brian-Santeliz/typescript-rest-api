@@ -7,6 +7,10 @@ export const getControllerProduct: RequestHandler = async (
 ): Promise<void> => {
   try {
     const products = await Product.find();
+    if (products.length <= 0) {
+      res.status(200).json("Products stock is empty");
+      return;
+    }
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json(error);
@@ -28,7 +32,7 @@ export const getIdControllerProduct: RequestHandler = async (
     res.status(500).json(error);
   }
 };
-export const postController: RequestHandler = async (
+export const postControllerProduct: RequestHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -46,6 +50,22 @@ export const postController: RequestHandler = async (
       res.status(500).json("field name is unique.");
       return;
     }
+    res.status(500).json(error);
+  }
+};
+export const deleteControllerProduct: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const { id } = req.params;
+  try {
+    const response = await Product.findByIdAndDelete(id);
+    if (!response) {
+      res.status(400).json("This product dont exist.");
+      return;
+    }
+    res.status(200).json("Deleted product successfully");
+  } catch (error) {
     res.status(500).json(error);
   }
 };
