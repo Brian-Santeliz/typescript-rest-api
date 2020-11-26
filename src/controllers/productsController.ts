@@ -1,9 +1,13 @@
-import { Response, Request } from "express";
+import { Response, Request, RequestHandler } from "express";
 import Product from "../models/Products";
-export const getControllerProduct = (req: Request, res: Response) => {
+export const getControllerProduct: RequestHandler = (
+  req: Request,
+  res: Response
+) => {
   res.json("Works!");
 };
-export const postController = async (
+
+export const postController: RequestHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {

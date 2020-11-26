@@ -1,6 +1,7 @@
 import mongoose, { ConnectionOptions } from "mongoose";
-
-const uri: string = "mongodb://127.0.0.1/typescript-api";
+import dotenv from "dotenv";
+dotenv.config();
+const uri: string = `mongodb://${process.env.HOST}/${process.env.BD}`;
 const options: ConnectionOptions = {
   useUnifiedTopology: true,
   useFindAndModify: true,
@@ -8,8 +9,8 @@ const options: ConnectionOptions = {
 };
 export const runDatabase = async (): Promise<void> => {
   try {
-    await mongoose.connect(uri, options);
-    console.log("Database is connected");
+    const db = await mongoose.connect(uri, options);
+    console.log(`Database is connected ${db.connection.name}`);
   } catch (error) {
     console.error("something was wrong with database", error);
   }
