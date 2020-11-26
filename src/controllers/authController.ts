@@ -6,7 +6,7 @@ dotenv.config();
 interface IPayload {
   id?: string;
 }
-export const signInController: RequestHandler = async (
+export const postSignInController: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
@@ -22,6 +22,7 @@ export const signInController: RequestHandler = async (
       password,
     });
     user.password = await user.hashPassword(password);
+    /* Investigar como no devolver el passwors */
     const newUser = await user.save();
     const payload: IPayload = {
       id: newUser.id,
@@ -29,10 +30,19 @@ export const signInController: RequestHandler = async (
     const jwtSign = jwt.sign(payload, process.env.SECRET || "secret", {
       expiresIn: "1h",
     });
-    res
-      .header("token", jwtSign)
-      .status(201)
-      .json({ msg: "User create", newUser });
+    res.header("token", jwtSign).status(201).json({ msg: "User create" });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+export const getSignInController: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json(error);
   }
