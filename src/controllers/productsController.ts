@@ -1,12 +1,12 @@
 import { Response, Request, RequestHandler } from "express";
-import Product from "../models/Products";
+import Product, { IProducts } from "../models/Products";
 
 export const getControllerProduct: RequestHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const products = await Product.find();
+    const products: IProducts[] = await Product.find();
     if (products.length <= 0) {
       res.status(200).json("Products stock is empty");
       return;
@@ -22,7 +22,7 @@ export const getIdControllerProduct: RequestHandler = async (
 ) => {
   const { id } = req.params;
   try {
-    const response = await Product.findById(id);
+    const response: IProducts | null = await Product.findById(id);
     if (!response) {
       res.status(400).json("This product dont exist.");
       return;
@@ -38,7 +38,7 @@ export const postControllerProduct: RequestHandler = async (
 ): Promise<void> => {
   const { name, description, price } = req.body;
   try {
-    const product = new Product({
+    const product: IProducts = new Product({
       name,
       description,
       price,
@@ -59,7 +59,7 @@ export const deleteControllerProduct: RequestHandler = async (
 ) => {
   const { id } = req.params;
   try {
-    const response = await Product.findByIdAndDelete(id);
+    const response: IProducts | null = await Product.findByIdAndDelete(id);
     if (!response) {
       res.status(400).json("This product dont exist.");
       return;
