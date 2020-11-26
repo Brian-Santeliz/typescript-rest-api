@@ -4,22 +4,28 @@ export interface IProducts extends Document {
   description: string;
   price: string;
 }
-const productsSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-    lowercase: true,
+const productsSchema = new Schema(
+  {
+    name: {
+      type: String,
+      unique: true,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+      trim: true,
+    },
   },
-  description: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  price: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-});
+  {
+    versionKey: false,
+  }
+);
 export default model<IProducts>("Products", productsSchema);
