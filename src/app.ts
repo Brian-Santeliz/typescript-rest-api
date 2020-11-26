@@ -4,6 +4,8 @@ import helmet from "helmet";
 import cors from "cors";
 import router from "./router";
 import { productRouter } from "./router/productsRouter";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app: Application = express();
 

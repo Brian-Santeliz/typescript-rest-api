@@ -1,13 +1,6 @@
-import mongoose, { ConnectionOptions } from "mongoose";
-import dotenv from "dotenv";
-dotenv.config();
-const uri: string = `mongodb://${process.env.HOST}/${process.env.BD}`;
-const options: ConnectionOptions = {
-  useUnifiedTopology: true,
-  useFindAndModify: true,
-  useNewUrlParser: true,
-  useCreateIndex: true,
-};
+import mongoose from "mongoose";
+import { options, uri } from "./optionsDatabase";
+
 export const runDatabase = async (): Promise<void> => {
   try {
     const db = await mongoose.connect(uri, options);
