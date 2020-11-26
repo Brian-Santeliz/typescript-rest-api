@@ -5,6 +5,7 @@ interface IUser extends Document {
   username: string;
   password: string;
   hashPassword: (password: string) => Promise<string>;
+  comparePassword: (password: string) => Promise<boolean>;
 }
 const userSchema = new Schema(
   {
@@ -34,5 +35,10 @@ const userSchema = new Schema(
 userSchema.methods.hashPassword = async (password: string): Promise<string> => {
   const salt = await bcrypt.genSalt(10);
   return await bcrypt.hash(password, salt);
+};
+userSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  return await bcrypt.compare(password, this.password);
 };
 export default model<IUser>("Users", userSchema);
