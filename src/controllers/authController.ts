@@ -35,7 +35,6 @@ export const postSignInController: RequestHandler = async (
       password,
     });
     user.password = await user.hashPassword(password);
-    /* Investigar como no devolver el passwors */
     const newUser = await user.save();
     const payload: IPayload = {
       id: newUser.id,
@@ -71,7 +70,7 @@ export const postSignUpController: RequestHandler = async (
     const token = jwt.sign(payload, process.env.SECRET || "secret", {
       expiresIn: "1h",
     });
-    res.header("token", token).json(`Welcome ${userFind.username}`)
+    res.header("token", token).json(`Welcome ${userFind.username}`);
   } catch (error) {
     res.status(500).json(error);
   }
