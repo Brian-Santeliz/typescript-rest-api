@@ -8,7 +8,7 @@ export const getControllerProduct: RequestHandler = async (
   try {
     const products: productType[] = await Product.find();
     if (products.length <= 0) {
-      res.status(200).json("Products stock is empty");
+      res.status(204).json("Products stock is empty");
       return;
     }
     res.status(200).json(products);
