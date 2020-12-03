@@ -5,6 +5,7 @@ import cors from "cors";
 import router from "./router";
 import { productRouter } from "./router/productsRouter";
 import authRouter from "./router/authRouter";
+import { verifyToken } from "./middlewares/authVerify";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -15,7 +16,7 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(json());
 app.use(cors());
-app.use("/home", router);
+app.use("/home", verifyToken, router);
 app.use("/products", productRouter);
 app.use("/auth", authRouter);
 export default app;

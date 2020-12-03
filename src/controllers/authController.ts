@@ -42,7 +42,10 @@ export const postSignInController: RequestHandler = async (
     const jwtSign = jwt.sign(payload, process.env.SECRET || "secret", {
       expiresIn: "1h",
     });
-    res.header("token", jwtSign).status(201).json({ msg: "User createted" });
+    res
+      .header("token", jwtSign)
+      .status(201)
+      .json({ msg: "User createted", newUser });
   } catch (error) {
     res.status(500).json(error);
   }
