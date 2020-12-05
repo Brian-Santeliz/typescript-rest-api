@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 interface IToken {
   id: string;
-  exp: string;
+  exp: number;
 }
 export const verifyToken: RequestHandler = (
   req: Request,
