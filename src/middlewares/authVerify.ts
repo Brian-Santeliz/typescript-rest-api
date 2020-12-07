@@ -1,3 +1,5 @@
+
+/**
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 interface IToken {
@@ -21,3 +23,4 @@ export const verifyToken: RequestHandler = (
   req.userId = tokenDecode.id;
   next();
 };
+*/
