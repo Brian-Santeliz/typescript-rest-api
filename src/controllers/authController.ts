@@ -2,6 +2,7 @@ import { RequestHandler, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import User from "../models/Users";
+import { validateUserSignIn, validateUserSignUp } from "../util/index";
 dotenv.config();
 interface IPayload {
   id?: string;
@@ -24,10 +25,8 @@ export const postSignInController: RequestHandler = async (
   res: Response
 ) => {
   const { email, username, password } = req.body;
-  if (!email.trim() || !username.trim() || !password.trim()) {
-    res.status(400).json("All fields is required");
-    return;
-  }
+  const result = validateUserSignIn(req.body);
+  if (result.error) return res.status(400).json(result);
   try {
     const user = new User({
       email,
@@ -47,6 +46,11 @@ export const postSignInController: RequestHandler = async (
       .status(201)
       .json({ msg: "User createted", newUser });
   } catch (error) {
+    if (error.code) {
+      return res
+        .status(500)
+        .json(`You trying create user with email: ${email}, but it is exist`);
+    }
     res.status(500).json(error);
   }
 };
@@ -55,8 +59,10 @@ export const postSignUpController: RequestHandler = async (
   res: Response
 ) => {
   const { email, password } = req.body;
-  if (!email || !password)
-    return res.status(400).json("All fields is required");
+  const result = validateUserSignUp(req.body);
+  if (result.error) {
+    return res.status(400).json(result);
+  }
   try {
     const userFind = await User.findOne({ email });
     if (!userFind) {

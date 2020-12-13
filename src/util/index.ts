@@ -9,14 +9,30 @@ export const validateProduct = (data: IProducts) => {
   });
   return schema.validate(data);
 };
-export const validateUser = (data: IUser) => {
+export const validateUserSignIn = (data: IUser) => {
   const schema = Joi.object({
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
       .trim()
       .required(),
-    username: Joi.string().alphanum().min(3).max(30).required(),
-    password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+    username: Joi.string().trim().alphanum().min(3).max(30).required(),
+    password: Joi.string()
+      .trim()
+      .required()
+      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+      .min(5)
+      .max(10),
+  });
+  return schema.validate(data);
+};
+
+export const validateUserSignUp = (data: IUser) => {
+  const schema = Joi.object({
+    email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+      .trim()
+      .required(),
+    password: Joi.string().trim().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
   });
   return schema.validate(data);
 };
