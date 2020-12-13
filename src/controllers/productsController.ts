@@ -1,6 +1,6 @@
 import { Response, Request, RequestHandler } from "express";
 import Product, { IProducts } from "../models/Products";
-import { validaProduct } from "../util/index";
+import { validateProduct } from "../util/index";
 type productType = IProducts | null;
 export const getControllerProduct: RequestHandler = async (
   req: Request,
@@ -38,7 +38,7 @@ export const postControllerProduct: RequestHandler = async (
   res: Response
 ): Promise<void | object> => {
   const { name, description, price } = req.body;
-  const result = validaProduct(req.body);
+  const result = validateProduct(req.body);
   if (result.error) {
     return res.status(400).json(result);
   }
@@ -80,7 +80,7 @@ export const putControllerProduct: RequestHandler = async (
   res: Response
 ): Promise<void | object> => {
   const { id } = req.params;
-  const result = validaProduct(req.body);
+  const result = validateProduct(req.body);
   if (result.error) {
     return res.status(400).json(result);
   }
