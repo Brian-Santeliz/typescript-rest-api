@@ -1,5 +1,6 @@
 import { Response, Request, RequestHandler } from "express";
 import Product, { IProducts } from "../models/Products";
+import { validaProduct } from "../util/index";
 type productType = IProducts | null;
 export const getControllerProduct: RequestHandler = async (
   req: Request,
@@ -35,8 +36,12 @@ export const getIdControllerProduct: RequestHandler = async (
 export const postControllerProduct: RequestHandler = async (
   req: Request,
   res: Response
-): Promise<void> => {
+): Promise<void | object> => {
   const { name, description, price } = req.body;
+  const result = validaProduct(req.body);
+  if (result.error) {
+    return res.status(400).json(result);
+  }
   try {
     const product: productType = new Product({
       name,
@@ -73,8 +78,12 @@ export const deleteControllerProduct: RequestHandler = async (
 export const putControllerProduct: RequestHandler = async (
   req: Request,
   res: Response
-) => {
+): Promise<void | object> => {
   const { id } = req.params;
+  const result = validaProduct(req.body);
+  if (result.error) {
+    return res.status(400).json(result);
+  }
   const updateProduct = {
     ...req.body,
   };
@@ -94,6 +103,11 @@ export const putControllerProduct: RequestHandler = async (
       .status(201)
       .json({ msg: "Product updated successfully", productUpdate });
   } catch (error) {
+    if (error.codeName) {
+      return res
+        .status(500)
+        .json("You trying update the name, but it is exist");
+    }
     res.status(500).json(error);
   }
 };

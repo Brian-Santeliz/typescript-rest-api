@@ -1,7 +1,7 @@
 import { ConnectionOptions } from "mongoose";
 export const options: ConnectionOptions = {
   useUnifiedTopology: true,
-  useFindAndModify: true,
+  useFindAndModify: false,
   useNewUrlParser: true,
   useCreateIndex: true,
 };
