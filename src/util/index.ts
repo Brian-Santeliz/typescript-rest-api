@@ -5,7 +5,7 @@ export const validateProduct = (data: IProducts) => {
   const schema = Joi.object({
     name: Joi.string().trim().required().min(3).max(30),
     price: Joi.number().required(),
-    description: Joi.string().trim().required().alphanum().min(3).max(30),
+    description: Joi.string().trim().required(),
   });
   return schema.validate(data);
 };

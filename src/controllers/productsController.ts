@@ -23,7 +23,7 @@ export const getIdControllerProduct: RequestHandler = async (
 ) => {
   const { id } = req.params;
   try {
-    const response: productType = await Product.findById(id);
+    const response: productType = await Product.findById(id).select({ _id: 0 });
     if (!response) {
       res.status(400).json("This product dont exist.");
       return;
