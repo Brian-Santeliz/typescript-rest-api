@@ -3,7 +3,7 @@ import { IProducts } from "../models/Products";
 import { IUser } from "../models/Users";
 export const validateProduct = (data: IProducts) => {
   const schema = Joi.object({
-    name: Joi.string().trim().required().min(3).max(30),
+    name: Joi.string().trim().required(),
     price: Joi.number().required(),
     description: Joi.string().trim().required(),
   });
